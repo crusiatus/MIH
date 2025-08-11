@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Your Session - Make It Happen Photography Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brandCyan: '#00F5D4',
+              brandSky: '#00C4F5',
+              brandViolet: '#7F00FF',
+              brandDark: '#1B1B1B',
+              brandWhite: '#FFFFFF',
+            },
+            fontFamily: {
+              sans: ["Poppins", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Arial", "sans-serif"],
+            },
+          }
+        }
+      }
+    </script>
+    <style>
+        /* Smooth transitions for all elements */
+        * {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Enhanced form hover effects */
+        input:hover, select:hover, textarea:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Smooth focus effects */
+        input:focus, select:focus, textarea:focus {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 196, 245, 0.2);
+        }
+        
+        /* Enhanced button hover effects */
+        a, button {
+            transition: all 0.3s ease-in-out !important;
+        }
+        
+        /* Card hover effects */
+        .bg-white.rounded-2xl:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Package selection smooth transitions */
+        label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 196, 245, 0.1);
+        }
+        
+        /* Smooth sidebar transitions */
+        .sticky {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00C4F5, #7F00FF);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .page-transition-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .page-transition-logo {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: scale(0);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .page-transition-overlay.active .page-transition-logo {
+            transform: scale(1);
+        }
+
+        .page-transition-logo img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        /* Loading animation */
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: loadingPulse 1.4s ease-in-out infinite both;
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dot:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes loadingPulse {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Page content fade */
+        .page-content {
+            opacity: 1;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .page-content.fade-out {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="bg-white text-brandDark font-sans">
+    <!-- Page Transition Overlay -->
+    <div class="page-transition-overlay" id="pageTransition">
+        <div class="text-center">
+            <div class="page-transition-logo">
+                <img src="./assets/logo/MIH_Black.png" alt="Make It Happen" />
+            </div>
+            <div class="loading-dots">
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+    <header class="bg-white border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+            <a class="flex items-center gap-3 no-underline text-brandDark" href="index.html" aria-label="Make It Happen Photography Studio home">
+                <img src="./assets/logo/MIH_Black.png" alt="Make It Happen logo" class="h-8 w-auto" width="32" height="32" />
+            </a>
+
+            <nav class="hidden md:block" aria-label="Primary">
+                <ul class="flex items-center gap-6">
+                    <li><a class="text-slate-600 hover:text-brandDark transition" href="index.html#home">Home</a></li>
+                    <li><a class="text-slate-600 hover:text-brandDark transition" href="index.html#portfolio">Portfolio</a></li>
+                    <li><a class="text-slate-600 hover:text-brandDark transition" href="index.html#services">Services</a></li>
+                    <li><a class="text-slate-600 hover:text-brandDark transition" href="index.html#about">About</a></li>
+                    <li><a class="inline-block text-brandDark border border-slate-300 rounded-full px-3 py-2 hover:border-slate-400 transition" href="index.html#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-5 py-10">
+        <div class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-semibold mb-4">Book Your Graduation Session</h1>
+            <p class="text-slate-600 max-w-2xl mx-auto">Ready to capture your special moment? Fill out the form below and we'll get back to you within 24 hours to confirm your booking.</p>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Booking Form -->
+            <div class="lg:col-span-2">
+                <form class="space-y-6" id="booking-form">
+                    <!-- Personal Information -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                        <h2 class="text-xl font-semibold mb-4">Personal Information</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="firstName" class="block text-sm font-medium text-slate-700 mb-2">First Name *</label>
+                                <input type="text" id="firstName" name="firstName" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brandSky focus:border-transparent">
+                            </div>
+                            <div>
+                                <label for="lastName" class="block text-sm font-medium text-slate-700 mb-2">Last Name *</label>
+                                <input type="text" id="lastName" name="lastName" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brandSky focus:border-transparent">
+                            </div>
+                            <div>
+                                <label for="email" class="block text-sm font-medium text-slate-700 mb-2">Email Address *</label>
+                                <input type="email" id="email" name="email" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brandSky focus:border-transparent">
+                            </div>
+                            <div>
+                                <label for="phone" class="block text-sm font-medium text-slate-700 mb-2">Phone Number *</label>
+                                <input type="tel" id="phone" name="phone" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brandSky focus:border-transparent">
+                            </div>
+                        </div>
+                    </div>
+
+                                         <!-- Package Selection -->
+                     <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                         <h2 class="text-xl font-semibold mb-4">Choose Your Package</h2>
+                         <div class="space-y-4">
+                             <label class="flex items-start gap-3 p-4 border border-slate-200 rounded-lg hover:border-brandSky cursor-pointer">
+                                 <input type="radio" name="package" value="solo" class="mt-1 text-brandSky focus:ring-brandSky">
+                                 <div class="flex-1">
+                                     <div class="flex justify-between items-start mb-2">
+                                         <div>
+                                             <h3 class="font-semibold">Solo Package</h3>
+                                             <p class="text-sm text-slate-600">Perfect for individual graduation portraits</p>
+                                         </div>
+                                         <span class="font-semibold text-brandDark">₱ 1,499</span>
+                                     </div>
+                                     <div class="text-xs text-slate-600 space-y-1">
+                                         <p><strong>Package Inclusions:</strong> Unlimited shots, free use of toga & barong/alampay, two (2) enhanced portraits</p>
+                                         <p><strong>Print Inclusions:</strong> 1 pc 8R graduation portrait (print only), 4 pcs wallet size (2 graduation + 2 barong/alampay)</p>
+                                     </div>
+                                 </div>
+                             </label>
+                             
+                             <label class="flex items-start gap-3 p-4 border border-slate-200 rounded-lg hover:border-brandSky cursor-pointer">
+                                 <input type="radio" name="package" value="basic" class="mt-1 text-brandSky focus:ring-brandSky">
+                                 <div class="flex-1">
+                                     <div class="flex justify-between items-start mb-2">
+                                         <div>
+                                             <h3 class="font-semibold">Basic Package</h3>
+                                             <p class="text-sm text-slate-600">Includes premium frame and more prints</p>
+                                         </div>
+                                         <span class="font-semibold text-brandDark">₱ 1,899</span>
+                                     </div>
+                                     <div class="text-xs text-slate-600 space-y-1">
+                                         <p><strong>Package Inclusions:</strong> Unlimited shots, free use of toga & barong/alampay, two (2) enhanced portraits</p>
+                                         <p><strong>Print Inclusions:</strong> 1 pc 8R graduation portrait with premium glass-to-glass frame, 4 pcs wallet size (2 graduation + 2 barong/alampay)</p>
+                                     </div>
+                                 </div>
+                             </label>
+                             
+                             <label class="flex items-start gap-3 p-4 border border-slate-200 rounded-lg hover:border-brandSky cursor-pointer">
+                                 <input type="radio" name="package" value="premium" class="mt-1 text-brandSky focus:ring-brandSky">
+                                 <div class="flex-1">
+                                     <div class="flex justify-between items-start mb-2">
+                                         <div>
+                                             <h3 class="font-semibold">Premium Package</h3>
+                                             <p class="text-sm text-slate-600">Includes hair & makeup, creative portraits</p>
+                                         </div>
+                                         <span class="font-semibold text-brandDark">₱ 2,899</span>
+                                     </div>
+                                     <div class="text-xs text-slate-600 space-y-1">
+                                         <p><strong>Package Inclusions:</strong> Free hair & makeup, unlimited shots, creative or corporate portrait (choose one), five (5) enhanced portraits</p>
+                                         <p><strong>Print Inclusions:</strong> 1 pc 10R graduation portrait with premium glass-to-glass frame, 2 pcs 5×7 photo print, 10 pcs wallet size (all edited photos)</p>
+                                     </div>
+                                 </div>
+                             </label>
+                             
+                             <label class="flex items-start gap-3 p-4 border border-slate-200 rounded-lg hover:border-brandSky cursor-pointer">
+                                 <input type="radio" name="package" value="platinum" class="mt-1 text-brandSky focus:ring-brandSky">
+                                 <div class="flex-1">
+                                     <div class="flex justify-between items-start mb-2">
+                                         <div>
+                                             <h3 class="font-semibold">Platinum Package</h3>
+                                             <p class="text-sm text-slate-600">Complete package with family portraits</p>
+                                         </div>
+                                         <span class="font-semibold text-brandDark">₱ 3,499</span>
+                                     </div>
+                                     <div class="text-xs text-slate-600 space-y-1">
+                                         <p><strong>Package Inclusions:</strong> Free hair & makeup, unlimited shots, family or couple portrait (choose one), five (5) enhanced portraits</p>
+                                         <p><strong>Print Inclusions:</strong> 1 pc 11R graduation portrait with premium glass-to-glass frame, 1 pc family/couple portrait with premium glass-to-glass frame, 5 pcs 5×7 photo print, 10 pcs wallet size (all edited photos)</p>
+                                     </div>
+                                 </div>
+                             </label>
+                         </div>
+                     </div>
+
+                                         <!-- Session Details -->
+                     <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                         <h2 class="text-xl font-semibold mb-4">Session Details</h2>
+                         <div class="mb-4 p-3 bg-brandSky/10 border border-brandSky/20 rounded-lg">
+                             <p class="text-sm text-brandDark font-medium">📋 <strong>Important:</strong> Each time slot accommodates a maximum of 5 students per hour. For groups larger than 5, please book multiple consecutive time slots or contact us for special arrangements.</p>
+                         </div>
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                             <div>
+                                 <label for="preferredDate" class="block text-sm font-medium text-slate-700 mb-2">Preferred Date *</label>
+                                 <input type="date" id="preferredDate" name="preferredDate" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brandSky focus:border-transparent">
+                             </div>
+                             <div>
+                                 <label for="preferredTime" class="block text-sm font-medium text-slate-700 mb-2">Preferred Time *</label>
+                                 <select id="preferredTime" name="preferredTime" required class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brandSky focus:border-transparent">
+                                     <option value="">Select time</option>
+                                     <option value="09:00">9:00 AM (5 students max)</option>
+                                     <option value="10:00">10:00 AM (5 students max)</option>
+                                     <option value="11:00">11:00 AM (5 students max)</option>
+                                     <option value="13:00">1:00 PM (5 students max)</option>
+                                     <option value="14:00">2:00 PM (5 students max)</option>
+                                     <option value="15:00">3:00 PM (5 students max)</option>
+                                     <option value="16:00">4:00 PM (5 students max)</option>
+                                 </select>
+                             </div>
+                             <div>
+                                 <label for="school" class="block text-sm font-medium text-slate-700 mb-2">School/University</label>
+                                 <input type="text" id="school" name="school" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brandSky focus:border-transparent">
+                             </div>
+                             <div>
+                                 <label for="graduationDate" class="block text-sm font-medium text-slate-700 mb-2">Graduation Date</label>
+                                 <input type="date" id="graduationDate" name="graduationDate" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brandSky focus:border-transparent">
+                             </div>
+                             <div class="md:col-span-2">
+                                 <label for="groupSize" class="block text-sm font-medium text-slate-700 mb-2">Number of Students in Group</label>
+                                 <select id="groupSize" name="groupSize" class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brandSky focus:border-transparent">
+                                     <option value="1">1 student</option>
+                                     <option value="2">2 students</option>
+                                     <option value="3">3 students</option>
+                                     <option value="4">4 students</option>
+                                     <option value="5">5 students</option>
+                                     <option value="6+">6+ students (contact us for arrangements)</option>
+                                 </select>
+                             </div>
+                         </div>
+                     </div>
+
+                                         <!-- Additional Services -->
+                     <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                         <h2 class="text-xl font-semibold mb-4">Additional Services (Optional)</h2>
+                         <div class="space-y-4">
+                             <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-lg hover:border-brandSky cursor-pointer">
+                                 <input type="checkbox" name="addons" value="hairMakeup" class="mt-1 text-brandSky focus:ring-brandSky">
+                                 <div class="flex-1">
+                                     <div class="flex justify-between items-start">
+                                         <div>
+                                             <h3 class="font-semibold">Hair & Makeup Service</h3>
+                                             <p class="text-sm text-slate-600">Professional styling for your graduation session</p>
+                                         </div>
+                                         <span class="font-semibold text-brandDark">₱1,000</span>
+                                     </div>
+                                 </div>
+                             </label>
+                             
+                             <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-lg hover:border-brandSky cursor-pointer">
+                                 <input type="checkbox" name="addons" value="creative" class="mt-1 text-brandSky focus:ring-brandSky">
+                                 <div class="flex-1">
+                                     <div class="flex justify-between items-start">
+                                         <div>
+                                             <h3 class="font-semibold">Creative/Barkada Portrait</h3>
+                                             <p class="text-sm text-slate-600">Fun group shots with friends (includes 10 wallet prints)</p>
+                                         </div>
+                                         <span class="font-semibold text-brandDark">₱500</span>
+                                     </div>
+                                 </div>
+                             </label>
+                             
+                             <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-lg hover:border-brandSky cursor-pointer">
+                                 <input type="checkbox" name="addons" value="family" class="mt-1 text-brandSky focus:ring-brandSky">
+                                 <div class="flex-1">
+                                     <div class="flex justify-between items-start">
+                                         <div>
+                                             <h3 class="font-semibold">Family/Couple Portrait</h3>
+                                             <p class="text-sm text-slate-600">Special moments with family or partner (includes 10 wallet prints)</p>
+                                         </div>
+                                         <span class="font-semibold text-brandDark">₱500</span>
+                                     </div>
+                                 </div>
+                             </label>
+                             
+                             <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-lg hover:border-brandSky cursor-pointer">
+                                 <input type="checkbox" name="addons" value="extraPrints" class="mt-1 text-brandSky focus:ring-brandSky">
+                                 <div class="flex-1">
+                                     <div class="flex justify-between items-start">
+                                         <div>
+                                             <h3 class="font-semibold">Additional Wallet Prints</h3>
+                                             <p class="text-sm text-slate-600">Extra 10 pieces of wallet size photos</p>
+                                         </div>
+                                         <span class="font-semibold text-brandDark">₱60</span>
+                                     </div>
+                                 </div>
+                             </label>
+                             
+                             <label class="flex items-start gap-3 p-3 border border-slate-200 rounded-lg hover:border-brandSky cursor-pointer">
+                                 <input type="checkbox" name="addons" value="rush" class="mt-1 text-brandSky focus:ring-brandSky">
+                                 <div class="flex-1">
+                                     <div class="flex justify-between items-start">
+                                         <div>
+                                             <h3 class="font-semibold">Rush Processing</h3>
+                                             <p class="text-sm text-slate-600">Expedited editing and delivery (additional fee applies)</p>
+                                         </div>
+                                         <span class="font-semibold text-brandDark">Contact us</span>
+                                     </div>
+                                 </div>
+                             </label>
+                         </div>
+                     </div>
+
+                    <!-- Special Requests -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                        <h2 class="text-xl font-semibold mb-4">Special Requests</h2>
+                        <textarea id="specialRequests" name="specialRequests" rows="4" placeholder="Any special requests, preferences, or additional information..." class="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brandSky focus:border-transparent"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="text-center">
+                        <button type="submit" class="bg-gradient-to-r from-brandSky to-brandViolet text-white font-semibold px-8 py-4 rounded-xl shadow-lg hover:shadow-xl transition">
+                            Submit Booking Request
+                        </button>
+                        <p class="text-sm text-slate-500 mt-3">We'll contact you within 24 hours to confirm your booking</p>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="lg:col-span-1">
+                <div class="sticky top-6 space-y-6">
+                    <!-- Package Summary -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                        <h3 class="text-lg font-semibold mb-4">What's Included</h3>
+                        <ul class="space-y-2 text-sm text-slate-700">
+                            <li class="flex gap-2"><svg class="w-4 h-4 text-brandSky mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Unlimited shots</li>
+                            <li class="flex gap-2"><svg class="w-4 h-4 text-brandSky mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Free use of toga & barong</li>
+                            <li class="flex gap-2"><svg class="w-4 h-4 text-brandSky mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Enhanced portraits</li>
+                            <li class="flex gap-2"><svg class="w-4 h-4 text-brandSky mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Soft copies (RAW & edited)</li>
+                            <li class="flex gap-2"><svg class="w-4 h-4 text-brandSky mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>1-month Google Drive access</li>
+                        </ul>
+                    </div>
+
+                                         <!-- Contact Info -->
+                     <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                         <h3 class="text-lg font-semibold mb-4">Contact Information</h3>
+                         <div class="space-y-3 text-sm">
+                             <div class="flex items-center gap-3">
+                                 <div class="w-6 h-6 bg-brandSky rounded flex items-center justify-center">
+                                     <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/></svg>
+                                 </div>
+                                 <span>info@makeithappen.ph</span>
+                             </div>
+                             <div class="flex items-center gap-3">
+                                 <div class="w-6 h-6 bg-brandSky rounded flex items-center justify-center">
+                                     <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
+                                 </div>
+                                 <span>+63 912 345 6789</span>
+                             </div>
+                         </div>
+                         
+                         <div class="mt-4 pt-4 border-t border-slate-200">
+                             <h4 class="font-medium text-slate-900 mb-3">Follow Us</h4>
+                             <div class="flex gap-3">
+                                 <a href="https://www.facebook.com/makeithappenphotographystudio" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-3 py-1 bg-blue-600 text-white rounded text-xs hover:bg-blue-700 transition">
+                                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                         <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                                     </svg>
+                                     <span>Facebook</span>
+                                 </a>
+                                 <a href="https://www.instagram.com/makeithappenphoto" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded text-xs hover:from-purple-600 hover:to-pink-600 transition">
+                                     <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                         <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.297-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.807.875 1.297 2.026 1.297 3.323s-.49 2.448-1.297 3.323c-.875.807-2.026 1.297-3.323 1.297zm7.718-1.297c-.875.807-2.026 1.297-3.323 1.297s-2.448-.49-3.323-1.297c-.807-.875-1.297-2.026-1.297-3.323s.49-2.448 1.297-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.807.875 1.297 2.026 1.297 3.323s-.49 2.448-1.297 3.323z"/>
+                                     </svg>
+                                     <span>Instagram</span>
+                                 </a>
+                             </div>
+                         </div>
+                     </div>
+
+                    <!-- Studio Hours -->
+                    <div class="bg-white rounded-2xl border border-slate-200 p-6">
+                        <h3 class="text-lg font-semibold mb-4">Studio Hours</h3>
+                        <div class="space-y-2 text-sm">
+                            <div class="flex justify-between">
+                                <span>Monday - Friday</span>
+                                <span>9:00 AM - 6:00 PM</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Saturday</span>
+                                <span>10:00 AM - 4:00 PM</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Sunday</span>
+                                <span>By appointment</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white mt-16">
+        <div class="max-w-6xl mx-auto px-5 py-6 text-slate-500">
+            <p>&copy; <span id="year"></span> Make It Happen Photography Studio. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Auto-select package from URL parameter
+        function autoSelectPackage() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const selectedPackage = urlParams.get('package');
+            
+            if (selectedPackage) {
+                const radioButton = document.querySelector(`input[name="package"][value="${selectedPackage}"]`);
+                if (radioButton) {
+                    radioButton.checked = true;
+                    
+                    // Scroll to the package selection section
+                    const packageSection = document.querySelector('input[name="package"]').closest('.bg-white');
+                    if (packageSection) {
+                        packageSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+                    
+                    // Add visual feedback with smooth transition
+                    const selectedLabel = radioButton.closest('label');
+                    if (selectedLabel) {
+                        selectedLabel.style.transition = 'all 0.3s ease-in-out';
+                        selectedLabel.style.borderColor = '#00C4F5';
+                        selectedLabel.style.backgroundColor = '#f0f9ff';
+                        
+                        // Remove highlight after 3 seconds with smooth transition
+                        setTimeout(() => {
+                            selectedLabel.style.borderColor = '';
+                            selectedLabel.style.backgroundColor = '';
+                        }, 3000);
+                    }
+                }
+            }
+        }
+
+        // Form submission handling with smooth feedback
+        document.getElementById('booking-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(this);
+            const data = Object.fromEntries(formData);
+            
+            // Simple validation
+            if (!data.firstName || !data.lastName || !data.email || !data.phone || !data.package || !data.preferredDate || !data.preferredTime) {
+                alert('Please fill in all required fields.');
+                return;
+            }
+            
+            // Here you would typically send the data to your server
+            // For now, we'll just show a success message
+            alert('Thank you for your booking request! We will contact you within 24 hours to confirm your session.');
+            
+            // Reset form
+            this.reset();
+        });
+
+        // Smooth fade-in animation for form sections
+        function fadeInOnScroll() {
+            const sections = document.querySelectorAll('.bg-white.rounded-2xl');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            sections.forEach(section => {
+                section.style.opacity = '0';
+                section.style.transform = 'translateY(20px)';
+                section.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                observer.observe(section);
+            });
+        }
+
+        // Enhanced hover effects for form elements
+        function addHoverEffects() {
+            const formElements = document.querySelectorAll('input, select, textarea, label');
+            formElements.forEach(element => {
+                element.style.transition = 'all 0.3s ease-in-out';
+            });
+
+            // Enhanced card hover effects
+            const cards = document.querySelectorAll('.bg-white.rounded-2xl');
+            cards.forEach(card => {
+                card.style.transition = 'all 0.3s ease-in-out';
+            });
+        }
+
+        // Smooth form field focus effects
+        function addFocusEffects() {
+            const inputs = document.querySelectorAll('input, select, textarea');
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.style.transform = 'scale(1.02)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        }
+
+        // Update year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+        
+                 // Page transition functionality
+         function showPageTransition() {
+             const overlay = document.getElementById('pageTransition');
+             const pageContent = document.querySelector('.page-content');
+             
+             // Fade out page content
+             pageContent.classList.add('fade-out');
+             
+             // Show transition overlay
+             setTimeout(() => {
+                 overlay.classList.add('active');
+             }, 300);
+         }
+
+         function hidePageTransition() {
+             const overlay = document.getElementById('pageTransition');
+             const pageContent = document.querySelector('.page-content');
+             
+             // Hide transition overlay
+             overlay.classList.remove('active');
+             
+             // Fade in page content
+             setTimeout(() => {
+                 pageContent.classList.remove('fade-out');
+             }, 600);
+         }
+
+         // Add transition to all internal links
+         function addPageTransitions() {
+             const links = document.querySelectorAll('a[href*="booking.html"], a[href*="index.html"]');
+             
+             links.forEach(link => {
+                 link.addEventListener('click', function(e) {
+                     // Only apply to internal navigation
+                     if (this.href.includes(window.location.origin) || this.href.startsWith('./') || this.href.startsWith('/')) {
+                         e.preventDefault();
+                         const targetUrl = this.href;
+                         
+                         showPageTransition();
+                         
+                         // Navigate after transition
+                         setTimeout(() => {
+                             window.location.href = targetUrl;
+                         }, 1000);
+                     }
+                 });
+             });
+         }
+
+         // Handle page load
+         window.addEventListener('load', function() {
+             hidePageTransition();
+         });
+
+         // Initialize all animations when page loads
+         document.addEventListener('DOMContentLoaded', function() {
+             autoSelectPackage();
+             fadeInOnScroll();
+             addHoverEffects();
+             addFocusEffects();
+             addPageTransitions();
+         });
+     </script>
+     </div> <!-- Close page-content div -->
+ </body>
+ </html>

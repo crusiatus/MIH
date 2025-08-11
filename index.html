@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Make It Happen Photography Studio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              brandCyan: '#00F5D4',
+              brandSky: '#00C4F5',
+              brandViolet: '#7F00FF',
+              brandDark: '#1B1B1B',
+              brandWhite: '#FFFFFF',
+            },
+            fontFamily: {
+              sans: ["Poppins", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Arial", "sans-serif"],
+            },
+          }
+        }
+      }
+    </script>
+    <style>
+        /* Smooth transitions for all elements */
+        * {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Enhanced hover effects */
+        .group:hover {
+            transform: translateY(-2px);
+        }
+        
+        /* Smooth image transitions */
+        img {
+            transition: transform 0.3s ease-in-out, opacity 0.3s ease-in-out;
+        }
+        
+        /* Enhanced button hover effects */
+        a, button {
+            transition: all 0.3s ease-in-out !important;
+        }
+        
+        /* Smooth form transitions */
+        input, select, textarea {
+            transition: all 0.3s ease-in-out;
+        }
+        
+        /* Gallery fade transitions */
+        #gallery-benilde, #portfolio {
+            transition: opacity 0.4s ease-in-out, transform 0.4s ease-in-out;
+        }
+
+        /* Page Transition Overlay */
+        .page-transition-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #00C4F5, #7F00FF);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .page-transition-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .page-transition-logo {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            transform: scale(0);
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .page-transition-overlay.active .page-transition-logo {
+            transform: scale(1);
+        }
+
+        .page-transition-logo img {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+        }
+
+        /* Loading animation */
+        .loading-dots {
+            display: flex;
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .loading-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: loadingPulse 1.4s ease-in-out infinite both;
+        }
+
+        .loading-dot:nth-child(1) { animation-delay: -0.32s; }
+        .loading-dot:nth-child(2) { animation-delay: -0.16s; }
+        .loading-dot:nth-child(3) { animation-delay: 0s; }
+
+        @keyframes loadingPulse {
+            0%, 80%, 100% {
+                transform: scale(0);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Page content fade */
+        .page-content {
+            opacity: 1;
+            transition: opacity 0.4s ease-in-out;
+        }
+
+        .page-content.fade-out {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body class="bg-white text-brandDark font-sans">
+    <!-- Page Transition Overlay -->
+    <div class="page-transition-overlay" id="pageTransition">
+        <div class="text-center">
+            <div class="page-transition-logo">
+                <img src="./assets/logo/MIH_Black.png" alt="Make It Happen" />
+            </div>
+            <div class="loading-dots">
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+                <div class="loading-dot"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-content">
+    <header class="bg-white border-b border-slate-200">
+        <div class="max-w-6xl mx-auto px-5 py-4 flex items-center justify-between">
+            <a class="flex items-center gap-3 no-underline text-brandDark" href="#home" aria-label="Make It Happen Photography Studio home">
+                <img src="./assets/logo/MIH_Black.png" alt="Make It Happen logo" class="h-8 w-auto" width="32" height="32" />
+            </a>
+
+            <button id="menu-btn" class="md:hidden inline-flex items-center justify-center w-10 h-10 text-brandDark focus:outline-none focus:ring-2 focus:ring-brandSky/60 rounded" aria-label="Toggle navigation" aria-controls="primary-navigation" aria-expanded="false">
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+
+            <nav id="primary-navigation" class="hidden md:block" aria-label="Primary">
+                <ul class="flex items-center gap-6">
+                    <li><a class="text-slate-600 hover:text-brandDark transition" href="#home">Home</a></li>
+                    <li><a class="text-slate-600 hover:text-brandDark transition" href="#portfolio">Portfolio</a></li>
+                    <li><a class="text-slate-600 hover:text-brandDark transition" href="#services">Services</a></li>
+                    <li><a class="text-slate-600 hover:text-brandDark transition" href="#about">About</a></li>
+                    <li><a class="inline-block text-brandDark border border-slate-300 rounded-full px-3 py-2 hover:border-slate-400 transition" href="#contact">Book Now</a></li>
+                </ul>
+            </nav>
+        </div>
+
+        <div id="mobile-nav" class="hidden md:hidden border-t border-slate-200 bg-white">
+            <div class="max-w-6xl mx-auto px-5 py-3">
+                <ul class="flex flex-col">
+                    <li><a class="block py-2 text-slate-700 hover:text-brandDark transition" href="#home">Home</a></li>
+                    <li><a class="block py-2 text-slate-700 hover:text-brandDark transition" href="#portfolio">Portfolio</a></li>
+                    <li><a class="block py-2 text-slate-700 hover:text-brandDark transition" href="#services">Services</a></li>
+                    <li><a class="block py-2 text-slate-700 hover:text-brandDark transition" href="#about">About</a></li>
+                    <li><a class="block py-2 text-brandDark border border-slate-300 rounded-lg px-3 hover:border-slate-400 transition" href="#contact">Book Now</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="relative overflow-hidden">
+            <div class="absolute inset-x-0 -top-24 h-64 bg-gradient-to-r from-brandCyan/30 via-brandSky/10 to-transparent blur-2xl" aria-hidden="true"></div>
+            <div class="max-w-6xl mx-auto px-5 py-16">
+                <h1 class="text-3xl sm:text-5xl font-semibold leading-tight">Capture moments. Make them happen.</h1>
+                <p class="mt-3 max-w-2xl text-slate-600">Professional studio photography for portraits, products, and events.</p>
+                <a href="booking.html" class="inline-block mt-6 bg-gradient-to-r from-brandSky to-brandViolet text-white font-bold px-5 py-3 rounded-xl shadow-md hover:shadow-lg transition">Book a Session</a>
+            </div>
+        </div>
+    </header>
+
+    <main id="home" class="max-w-6xl mx-auto px-5 py-10">
+        <section id="portfolio" class="my-10 p-6 rounded-xl border border-slate-200 bg-white">
+            <h2 class="text-xl font-semibold">Portfolio</h2>
+            <p class="text-slate-600">Showcase your best work here.</p>
+
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold mb-3">Schools</h3>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-6">
+                    <a id="school-benilde-link" href="#gallery-benilde" class="group rounded-xl border border-slate-200 bg-white p-4 flex items-center gap-3 hover:shadow-sm transition">
+                        <img src="./assets/logo/schools/benilde.png" alt="Benilde logo" class="h-10 w-auto" width="40" height="40" />
+                        <span class="text-sm text-slate-700 group-hover:text-brandDark">Benilde</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="gallery-benilde" class="my-10 p-6 rounded-xl border border-slate-200 bg-white hidden">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-semibold">Benilde Gallery</h2>
+                <a id="back-to-portfolio" href="#portfolio" class="text-sm text-slate-600 hover:text-brandDark">Back to Portfolio</a>
+            </div>
+            <div class="mt-4 columns-1 sm:columns-2 md:columns-3 lg:columns-4 gap-4 [column-fill:_balance]">
+                <figure class="mb-4 break-inside-avoid rounded-xl border border-slate-200 overflow-hidden bg-gradient-to-br from-brandSky/10 via-brandCyan/10 to-brandViolet/10">
+                    <img src="./assets/benilde/1.jpg" alt="Benilde graduation portrait" class="w-full h-auto" loading="lazy" />
+                </figure>
+                <figure class="mb-4 break-inside-avoid rounded-xl border border-slate-200 overflow-hidden bg-gradient-to-br from-brandViolet/10 via-brandSky/10 to-brandCyan/10">
+                    <img src="./assets/benilde/2.webp" alt="Benilde student portrait" class="w-full h-auto" loading="lazy" />
+                </figure>
+                <figure class="mb-4 break-inside-avoid rounded-xl border border-slate-200 overflow-hidden bg-gradient-to-br from-brandCyan/10 via-brandViolet/10 to-brandSky/10">
+                    <img src="./assets/benilde/3.webp" alt="Benilde graduation ceremony" class="w-full h-auto" loading="lazy" />
+                </figure>
+                <figure class="mb-4 break-inside-avoid rounded-xl border border-slate-200 overflow-hidden bg-gradient-to-br from-brandSky/10 via-brandCyan/10 to-brandViolet/10">
+                    <img src="./assets/benilde/4.webp" alt="Benilde campus photography" class="w-full h-auto" loading="lazy" />
+                </figure>
+                <figure class="mb-4 break-inside-avoid rounded-xl border border-slate-200 overflow-hidden bg-gradient-to-br from-brandViolet/10 via-brandCyan/10 to-brandSky/10">
+                    <img src="./assets/benilde/5.webp" alt="Benilde event coverage" class="w-full h-auto" loading="lazy" />
+                </figure>
+            </div>
+        </section>
+        <section id="services" class="my-10 p-6 rounded-2xl border border-slate-200 bg-white">
+            <div class="flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                    <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">Graduation Packages</h2>
+                    <p class="text-slate-600">Soft copies (RAW & edited) with 1‑month Google Drive access included for all plans.</p>
+                </div>
+                <a href="booking.html" class="inline-flex items-center gap-2 bg-brandDark text-white font-semibold px-4 py-2 rounded-xl hover:opacity-90 transition">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="currentColor"><path d="M12 5v14m7-7H5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    Get a quote
+                </a>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Solo -->
+                <article class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition">
+                    <div class="flex items-baseline justify-between">
+                        <h3 class="text-base font-semibold">Solo</h3>
+                        <div class="text-2xl font-semibold">₱ 1,499</div>
+                    </div>
+                    <ul class="mt-4 space-y-2 text-sm text-slate-700">
+                        <li class="flex gap-2"><svg class="w-4 h-4 text-brandSky mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Unlimited shots; free use of toga and barong/alampay</li>
+                        <li class="flex gap-2"><svg class="w-4 h-4 text-brandSky mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Two enhanced portraits</li>
+                        <li class="flex gap-2"><svg class="w-4 h-4 text-brandSky mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Prints: 1×8R, 4×wallet, 2×grad, 2×barong/alampay</li>
+                    </ul>
+                    <a href="booking.html?package=solo" class="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-brandDark px-4 py-2 text-white font-semibold">Choose plan</a>
+                </article>
+
+                <!-- Basic -->
+                <article class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition">
+                    <div class="flex items-baseline justify-between">
+                        <h3 class="text-base font-semibold">Basic</h3>
+                        <div class="text-2xl font-semibold">₱ 1,899</div>
+                    </div>
+                    <ul class="mt-4 space-y-2 text-sm text-slate-700">
+                        <li class="flex gap-2"><svg class="w-4 h-4 text-brandViolet mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Unlimited shots; free use of toga & barong/alampay</li>
+                        <li class="flex gap-2"><svg class="w-4 h-4 text-brandViolet mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Two enhanced portraits</li>
+                        <li class="flex gap-2"><svg class="w-4 h-4 text-brandViolet mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Prints: 1×8R framed, 2×5×7, 2×grad, 2×barong/alampay</li>
+                    </ul>
+                    <a href="booking.html?package=basic" class="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-brandDark px-4 py-2 text-white font-semibold">Choose plan</a>
+                </article>
+
+                <!-- Premium (Most popular) -->
+                <article class="group relative rounded-2xl border border-brandViolet/40 bg-white p-6 shadow-sm ring-2 ring-brandViolet/30 hover:shadow-lg hover:-translate-y-0.5 transition">
+                    <span class="absolute -top-3 right-4 rounded-full bg-gradient-to-r from-brandSky to-brandViolet px-3 py-1 text-xs font-semibold text-white shadow">Most popular</span>
+                    <div class="flex items-baseline justify-between">
+                        <h3 class="text-base font-semibold">Premium</h3>
+                        <div class="text-2xl font-semibold">₱ 2,899</div>
+                    </div>
+                    <ul class="mt-4 space-y-2 text-sm text-slate-700">
+                        <li class="flex gap-2"><svg class="w-4 h-4 text-brandCyan mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Free hair & makeup; unlimited shots</li>
+                        <li class="flex gap-2"><svg class="w-4 h-4 text-brandCyan mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Creative or Corporate portrait (choose one)</li>
+                        <li class="flex gap-2"><svg class="w-4 h-4 text-brandCyan mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Prints: 1×10R framed, 2×5×7, 10×wallet</li>
+                    </ul>
+                    <a href="booking.html?package=premium" class="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-gradient-to-r from-brandSky to-brandViolet px-4 py-2 text-white font-semibold">Choose plan</a>
+                </article>
+
+                <!-- Platinum -->
+                <article class="group rounded-2xl border border-slate-200 bg-white p-6 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition">
+                    <div class="flex items-baseline justify-between">
+                        <h3 class="text-base font-semibold">Platinum</h3>
+                        <div class="text-2xl font-semibold">₱ 3,499</div>
+                    </div>
+                    <ul class="mt-4 space-y-2 text-sm text-slate-700">
+                        <li class="flex gap-2"><svg class="w-4 h-4 text-brandViolet mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Free hair & makeup; unlimited shots</li>
+                        <li class="flex gap-2"><svg class="w-4 h-4 text-brandViolet mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Family or Couple portrait (choose one)</li>
+                        <li class="flex gap-2"><svg class="w-4 h-4 text-brandViolet mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/></svg>Prints: 1×11R framed, 1×family/couple framed, 2×5×7, 10×wallet</li>
+                    </ul>
+                    <a href="booking.html?package=platinum" class="mt-6 inline-flex w-full items-center justify-center rounded-lg bg-brandDark px-4 py-2 text-white font-semibold">Choose plan</a>
+                </article>
+            </div>
+
+            <p class="mt-6 text-xs text-slate-500">For groups of five (5) students or more, ask us about our barkada discount. Optional add‑ons and rush services available upon request.</p>
+        </section>
+        <section id="about" class="my-10 p-6 rounded-xl border border-slate-200 bg-white">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-3xl font-semibold mb-4">About Make It Happen Photography</h2>
+                <p class="text-slate-600 max-w-3xl mx-auto">We specialize in capturing your most precious moments, particularly graduation photography that celebrates your academic achievements.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Our Mission -->
+                <div class="text-center p-6 rounded-xl bg-gradient-to-br from-brandSky/5 to-brandViolet/5 border border-slate-200">
+                    <div class="w-12 h-12 bg-gradient-to-r from-brandSky to-brandViolet rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Our Mission</h3>
+                    <p class="text-sm text-slate-600">To provide quality prints and frames that preserve your graduation memories for a lifetime. We believe every graduate deserves beautiful, professional portraits that capture their achievement.</p>
+                </div>
+
+                <!-- What We Provide -->
+                <div class="text-center p-6 rounded-xl bg-gradient-to-br from-brandCyan/5 to-brandSky/5 border border-slate-200">
+                    <div class="w-12 h-12 bg-gradient-to-r from-brandCyan to-brandSky rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">What We Provide</h3>
+                    <p class="text-sm text-slate-600">Complete graduation packages including professional hair & makeup services, sanitized toga and barong/alampay, and assistance during your shoot. All garments are available in sizes Small to Extra Large.</p>
+                </div>
+
+                <!-- Our Philosophy -->
+                <div class="text-center p-6 rounded-xl bg-gradient-to-br from-brandViolet/5 to-brandCyan/5 border border-slate-200">
+                    <div class="w-12 h-12 bg-gradient-to-r from-brandViolet to-brandCyan rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"/>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold mb-2">Our Philosophy</h3>
+                    <p class="text-sm text-slate-600">"You can be with someone you love" - We believe graduation photography should capture not just individual achievement, but the support and love of family and friends who made it possible.</p>
+                </div>
+            </div>
+
+            <!-- Key Features -->
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl border border-slate-200 p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-brandDark">Why Choose Make It Happen?</h3>
+                    <ul class="space-y-3 text-sm text-slate-700">
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-brandSky mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span>Professional hair & makeup services included</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-brandSky mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span>Complete and legitimate graduation medals</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-brandSky mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span>Sanitized toga and traditional Filipino attire</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-brandSky mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span>Premium glass-to-glass frames for prints</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-xl border border-slate-200 p-6">
+                    <h3 class="text-lg font-semibold mb-4 text-brandDark">Our Services Include</h3>
+                    <ul class="space-y-3 text-sm text-slate-700">
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-brandViolet mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span>Unlimited shots during your session</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-brandViolet mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span>Professional assistance during shoots</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-brandViolet mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span>Family and couple portrait options</span>
+                        </li>
+                        <li class="flex gap-3">
+                            <svg class="w-5 h-5 text-brandViolet mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M16.707 5.293a1 1 0 010 1.414l-7.25 7.25a1 1 0 01-1.414 0l-3-3a1 1 0 111.414-1.414l2.293 2.293 6.543-6.543a1 1 0 011.414 0z"/>
+                            </svg>
+                            <span>1-month Google Drive access for all photos</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Call to Action -->
+            <div class="mt-8 text-center p-6 rounded-xl bg-gradient-to-r from-brandSky/10 to-brandViolet/10 border border-slate-200">
+                <h3 class="text-xl font-semibold mb-2">Ready to Capture Your Graduation Moment?</h3>
+                <p class="text-slate-600 mb-4">Let us help you create beautiful memories that will last a lifetime.</p>
+                <a href="booking.html" class="inline-flex items-center gap-2 bg-gradient-to-r from-brandSky to-brandViolet text-white font-semibold px-6 py-3 rounded-xl hover:shadow-lg transition">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 0l-3 3a1 1 0 001.414 1.414L9 9.414V13a1 1 0 102 0V9.414l1.293 1.293a1 1 0 001.414-1.414z" clip-rule="evenodd"/>
+                    </svg>
+                    Book Your Session Now
+                </a>
+            </div>
+        </section>
+        <section id="contact" class="my-10 p-6 rounded-xl border border-slate-200 bg-white">
+            <div class="text-center mb-8">
+                <h2 class="text-2xl sm:text-3xl font-semibold mb-4">Get In Touch</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto">Ready to book your graduation session? Connect with us.</p>
+            </div>
+
+            <div class="max-w-2xl mx-auto">
+                <!-- Contact Cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8">
+                    <!-- Email -->
+                    <div class="flex items-center gap-3 p-4 bg-slate-50 rounded-lg">
+                        <div class="w-8 h-8 bg-brandSky rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"/></svg>
+                        </div>
+                        <div>
+                            <p class="font-medium text-sm">Email</p>
+                            <p class="text-xs text-slate-600">info@makeithappen.ph</p>
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div class="flex items-center gap-3 p-4 bg-slate-50 rounded-lg">
+                        <div class="w-8 h-8 bg-brandSky rounded-lg flex items-center justify-center">
+                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
+                        </div>
+                        <div>
+                            <p class="font-medium text-sm">Phone</p>
+                            <p class="text-xs text-slate-600">+63 912 345 6789</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Social Media -->
+                <div class="flex justify-center gap-4 mb-8">
+                    <a href="https://www.facebook.com/makeithappenphotographystudio" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                        <span class="text-sm">Facebook</span>
+                    </a>
+                    <a href="https://www.instagram.com/makeithappenphoto" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-500 text-white rounded-lg hover:from-purple-600 hover:to-pink-600 transition">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.62 5.367 11.987 11.988 11.987 6.62 0 11.987-5.367 11.987-11.987C24.014 5.367 18.637.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.49-3.323-1.297C4.198 14.895 3.708 13.744 3.708 12.447s.49-2.448 1.297-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.807.875 1.297 2.026 1.297 3.323s-.49 2.448-1.297 3.323c-.875.807-2.026 1.297-3.323 1.297zm7.718-1.297c-.875.807-2.026 1.297-3.323 1.297s-2.448-.49-3.323-1.297c-.807-.875-1.297-2.026-1.297-3.323s.49-2.448 1.297-3.323c.875-.807 2.026-1.297 3.323-1.297s2.448.49 3.323 1.297c.807.875 1.297 2.026 1.297 3.323s-.49 2.448-1.297 3.323z"/>
+                        </svg>
+                        <span class="text-sm">Instagram</span>
+                    </a>
+                </div>
+
+                <!-- Call to Action -->
+                <div class="text-center">
+                    <a href="booking.html" class="inline-flex items-center gap-2 bg-gradient-to-r from-brandSky to-brandViolet text-white font-semibold px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition">
+                        <span>Book Your Session</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+                        
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-slate-200 bg-white">
+        <div class="max-w-6xl mx-auto px-5 py-6 text-slate-500">
+            <p>&copy; <span id="year"></span> Make It Happen Photography Studio. All rights reserved.</p>
+        </div>
+        <script>
+            const btn = document.getElementById('menu-btn');
+            const mobile = document.getElementById('mobile-nav');
+            const primary = document.getElementById('primary-navigation');
+            const benildeLink = document.getElementById('school-benilde-link');
+            const benildeGallery = document.getElementById('gallery-benilde');
+            const portfolioSection = document.getElementById('portfolio');
+            const backToPortfolio = document.getElementById('back-to-portfolio');
+            
+            btn?.addEventListener('click', () => {
+              const expanded = btn.getAttribute('aria-expanded') === 'true';
+              btn.setAttribute('aria-expanded', String(!expanded));
+              mobile.classList.toggle('hidden');
+            });
+
+            // Smooth fade transitions for gallery toggle
+            benildeLink?.addEventListener('click', (e) => {
+              e.preventDefault();
+              portfolioSection.style.opacity = '0';
+              portfolioSection.style.transform = 'translateY(20px)';
+              setTimeout(() => {
+                portfolioSection.classList.add('hidden');
+                benildeGallery.classList.remove('hidden');
+                benildeGallery.style.opacity = '0';
+                benildeGallery.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                  benildeGallery.style.opacity = '1';
+                  benildeGallery.style.transform = 'translateY(0)';
+                }, 50);
+                benildeGallery.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }, 300);
+            });
+            
+            backToPortfolio?.addEventListener('click', (e) => {
+              e.preventDefault();
+              benildeGallery.style.opacity = '0';
+              benildeGallery.style.transform = 'translateY(20px)';
+              setTimeout(() => {
+                benildeGallery.classList.add('hidden');
+                portfolioSection.classList.remove('hidden');
+                portfolioSection.style.opacity = '0';
+                portfolioSection.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                  portfolioSection.style.opacity = '1';
+                  portfolioSection.style.transform = 'translateY(0)';
+                }, 50);
+                portfolioSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }, 300);
+            });
+
+            // Smooth fade-in animation for sections
+            function fadeInOnScroll() {
+                const sections = document.querySelectorAll('section');
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.style.opacity = '1';
+                            entry.target.style.transform = 'translateY(0)';
+                        }
+                    });
+                }, { threshold: 0.1 });
+
+                sections.forEach(section => {
+                    section.style.opacity = '0';
+                    section.style.transform = 'translateY(20px)';
+                    section.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+                    observer.observe(section);
+                });
+            }
+
+            // Enhanced hover effects for cards
+            function addHoverEffects() {
+                const cards = document.querySelectorAll('.group, .bg-white.rounded-2xl, .bg-white.rounded-xl');
+                cards.forEach(card => {
+                    card.style.transition = 'all 0.3s ease-in-out';
+                });
+            }
+
+            // Page transition functionality
+            function showPageTransition() {
+                const overlay = document.getElementById('pageTransition');
+                const pageContent = document.querySelector('.page-content');
+                
+                // Fade out page content
+                pageContent.classList.add('fade-out');
+                
+                // Show transition overlay
+                setTimeout(() => {
+                    overlay.classList.add('active');
+                }, 300);
+            }
+
+            function hidePageTransition() {
+                const overlay = document.getElementById('pageTransition');
+                const pageContent = document.querySelector('.page-content');
+                
+                // Hide transition overlay
+                overlay.classList.remove('active');
+                
+                // Fade in page content
+                setTimeout(() => {
+                    pageContent.classList.remove('fade-out');
+                }, 600);
+            }
+
+            // Add transition to all internal links
+            function addPageTransitions() {
+                const links = document.querySelectorAll('a[href*="booking.html"], a[href*="index.html"]');
+                
+                links.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        // Only apply to internal navigation
+                        if (this.href.includes(window.location.origin) || this.href.startsWith('./') || this.href.startsWith('/')) {
+                            e.preventDefault();
+                            const targetUrl = this.href;
+                            
+                            showPageTransition();
+                            
+                            // Navigate after transition
+                            setTimeout(() => {
+                                window.location.href = targetUrl;
+                            }, 1000);
+                        }
+                    });
+                });
+            }
+
+            // Handle page load
+            window.addEventListener('load', function() {
+                hidePageTransition();
+            });
+
+            // Initialize animations when page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                fadeInOnScroll();
+                addHoverEffects();
+                addPageTransitions();
+            });
+
+            document.getElementById('year').textContent = new Date().getFullYear();
+        </script>
+    </footer>
+
+</body>
+</html>
